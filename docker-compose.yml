@@ -1,0 +1,39 @@
+version: '3.8'
+
+networks:
+  backend-tier:
+    driver: bridge
+
+volumes:
+  pgsql-data:
+
+services:
+  pgsql:
+    image: bitnami/postgresql:latest
+    restart: unless-stopped
+    container_name: pgsql-example-3
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    volumes:
+      - type: volume
+        source: pgsql-data
+        target: /var/lib/postgresql/data
+    networks:
+      - backend-tier
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    container_name: example-backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - pgsql
+    networks:
+      - backend-tier
