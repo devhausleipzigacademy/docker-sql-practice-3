@@ -21,6 +21,7 @@ model Post {
   content   String
   image     String
   tags      String[]
+  reactions EmojiPost[]
   comments  Comment[]
 }
 
@@ -33,4 +34,32 @@ model Comment {
   content   String
   post      Post     @relation(fields: [postId], references: [id])
   postId    Int
+  reactions EmojiComment[]
+}
+
+model EmojiComment {
+  number      Int
+  comment     Comment   @relation(fields: [commentId], references: [id])
+  commentId   Int
+  emoji       Emoji  @relation(fields: [emojiId], references: [id])
+  emojiId     Int
+
+  @@id([commentId, emojiId])
+}
+
+model EmojiPost {
+  number     Int
+  post       Post     @relation(fields: [postId], references: [id])
+  postId     Int
+  emoji      Emoji     @relation(fields: [emojiId], references: [id])
+  emojiId    Int
+
+  @@id([postId, emojiId])
+}
+
+model Emoji {
+  id          Int         @id @default(autoincrement())
+  character   String
+  posts       EmojiPost[]
+  comments    EmojiComment[]
 }
