@@ -16,3 +16,8 @@ DATABASE_URL="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@pgsql:${POSTGRE
 
 ## Seeding the database
 A hack has been implemented to allow you to seed the database with test data for development purposes. In production, the DB should not have any externally mapped ports and should only be accessible from within the internal network. The `./prisma` folder, however, should always be a volume because you do want to persist the migrations.
+
+## Changing the schemata
+When you change the Prisma models/DB schemata, you can simply rebuild the container. However, the data in the database/in the seed file may no longer match. You will have to update the seed file to match the changed models.
+
+If old data is still in the DB and is not removed by Prisma as part of a migration, you can manually reset the data stored in the PostgreSQL volume by ensuring the containers are not running (`docker-compose stop`) and then executing `docker volume prune` to delete the managed volume. Then you can start up the containers again and then run `npm run migrate` and `npm run seed` to seed the database with your new test data.
