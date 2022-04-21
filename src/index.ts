@@ -7,7 +7,7 @@ const app = express()
 app.use(express.json())
 
 app.post(`/post/`, async (req, res) => {
-    const { author, email, title, content, image, tags } = req.body
+    const { author, email, title, content, image, tags, reactions } = req.body
 
     const result = await prisma.post.create({
         data: {
@@ -17,6 +17,7 @@ app.post(`/post/`, async (req, res) => {
             content, 
             image,
             tags,
+            reactions
         },
     })
 
