@@ -14,8 +14,23 @@ model Post {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  viewCount Int      @default(0)
+  author    String
+  email     String
   title     String
   content   String
-  authorName String
-  authorEmail String
+  image     String
+  tags      String[]
+  comments  Comment[]
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  author    String
+  email     String
+  content   String
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    Int
 }

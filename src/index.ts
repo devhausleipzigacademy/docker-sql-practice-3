@@ -7,14 +7,16 @@ const app = express()
 app.use(express.json())
 
 app.post(`/post/`, async (req, res) => {
-    const { title, content, authorName, authorEmail } = req.body
+    const { author, email, title, content, image, tags } = req.body
 
     const result = await prisma.post.create({
         data: {
-            title,
-            content,
-            authorName,
-            authorEmail
+            author,
+            email, 
+            title, 
+            content, 
+            image,
+            tags,
         },
     })
 
@@ -26,6 +28,52 @@ app.get('/post/', async (req, res) => {
     const posts = await prisma.post.findMany({})
 
     res.json(posts)
+})
+
+app.put('/post/:id/views', async (req, res) => {
+    const { id } = req.params
+
+    try {
+    const post = await prisma.post.update({
+        where: { id: Number(id) },
+        data: {
+            viewCount: {
+                increment: 1,
+            },
+        },
+    })
+
+        res.json(post)
+    } catch (error) {
+        res.json({ error: `Post with ID ${id} does not exist in the database` })
+    }
+})
+
+app.post(`/post/:post_id/comment/`, async (req, res) => {
+    const { post_id } = req.params;
+    const { author, email, content} = req.body
+
+    const result = await prisma.comment.create({
+        data: {
+            author,
+            email, 
+            content,
+            post: { connect: { id: Number(post_id) } }
+        },
+    })
+
+    res.json(result)
+})
+
+app.get('/post/:post_id/comment/', async (req, res) => {
+    const { post_id } = req.params;
+    const comments = await prisma.comment.findMany({
+        where: {
+            postId: Number(post_id)
+        }
+    })
+
+    res.json(comments)
 })
 
 const server = app.listen(8000, () =>
