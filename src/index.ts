@@ -138,15 +138,15 @@ const posts = await prisma.post.findMany({
         published: true,
         ...or,
     },
-    include: { author: true },
-    take: Number(take) || undefined,
-    skip: Number(skip) || undefined,
-    orderBy: {
-        updatedAt: orderBy as Prisma.SortOrder,
-    },
-})
+        include: { author: true },
+        take: Number(take) || undefined,
+        skip: Number(skip) || undefined,
+        orderBy: {
+            updatedAt: orderBy as Prisma.SortOrder,
+        },
+    })
 
-res.json(posts)
+    res.json(posts)
 })
 
 const server = app.listen(8000, () =>

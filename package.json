@@ -2,8 +2,9 @@
   "name": "docker-sql-practice-3",
   "version": "1.0.0",
   "scripts": {
-    "start": "npx prisma migrate deploy && npx prisma db seed && ts-node src/index.ts",
-    "migrate": "npx prisma migrate dev --name init"
+    "start": "npx prisma migrate deploy && ts-node src/index.ts",
+    "migrate": "npx prisma migrate dev --name init",
+    "seed": "npx prisma db seed"
   },
   "author": "",
   "license": "ISC",

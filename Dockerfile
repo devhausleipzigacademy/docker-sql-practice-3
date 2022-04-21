@@ -14,6 +14,6 @@ RUN npm update
 RUN npm install
 
 COPY ./src /src
-WORKDIR /src
+WORKDIR /
 
 CMD ["npm", "start"]

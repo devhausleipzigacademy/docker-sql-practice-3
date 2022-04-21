@@ -3,7 +3,7 @@
 
 ## Prerequisites
 
-Creat `.env` file and add to it:
+Create an `.env` file and add to it:
 
 ```sh
 POSTGRES_USER=local_admin
