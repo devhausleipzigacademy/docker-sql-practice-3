@@ -12,8 +12,8 @@ app.post(`/post/`, async (req, res) => {
     const result = await prisma.post.create({
         data: {
             author,
-            email, 
-            title, 
+            email,
+            title,
             content, 
             image,
             tags,
