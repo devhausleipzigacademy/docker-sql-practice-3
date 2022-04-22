@@ -38,28 +38,28 @@ model Comment {
 }
 
 model EmojiComment {
-  number      Int
+  number      Int       @default(0)
   comment     Comment   @relation(fields: [commentId], references: [id])
   commentId   Int
-  emoji       Emoji  @relation(fields: [emojiId], references: [id])
+  emoji       Emoji     @relation(fields: [emojiId], references: [id])
   emojiId     Int
 
   @@id([commentId, emojiId])
 }
 
 model EmojiPost {
-  number     Int
+  number     Int      @default(0)
   post       Post     @relation(fields: [postId], references: [id])
   postId     Int
-  emoji      Emoji     @relation(fields: [emojiId], references: [id])
+  emoji      Emoji    @relation(fields: [emojiId], references: [id])
   emojiId    Int
 
   @@id([postId, emojiId])
 }
 
 model Emoji {
-  id          Int         @id @default(autoincrement())
-  character   String
+  id          Int           @id @default(autoincrement())
+  character   String        @unique
   posts       EmojiPost[]
   comments    EmojiComment[]
 }
