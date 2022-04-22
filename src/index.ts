@@ -52,38 +52,38 @@ app.put('/post/:id/views', async (req, res) => {
     }
 })
 
-app.put(`/post/:post_id/reactions/`, async (req, res) => {
-    const { post_id } = req.params;
-    const { reactions } = req.body
+// app.put(`/post/:post_id/reactions/`, async (req, res) => {
+//     const { post_id } = req.params;
+//     const { reactions } = req.body
 
-    const result = await prisma.post.update({
-        where: {
-            id: Number(post_id)
-        },
-        data: {
-            reactions: { 
-                connectOrCreate: reactions.map( (emojiObj: {character: string, number: number}) => {
-                return { 
-                    where: { 
-                        emoji: { connect: { character: emojiObj.character } },
-                        number: { increment: 1 }
-                    },
-                    create: { 
-                        postId: Number(post_id),
-                        emoji: {
-                            connectOrCreate: {
-                                where: { character: emojiObj.character },
-                                create: { character: emojiObj.character }
-                            }
-                        }
-                    },
-                }
-            })}
-        },
-    })
+//     const result = await prisma.post.update({
+//         where: {
+//             id: Number(post_id)
+//         },
+//         data: {
+//             reactions: { 
+//                 connectOrCreate: reactions.map( (emojiObj: {character: string, number: number}) => {
+//                 return { 
+//                     where: { 
+//                         emoji: { connect: { character: emojiObj.character } },
+//                         number: { increment: 1 }
+//                     },
+//                     create: { 
+//                         postId: Number(post_id),
+//                         emoji: {
+//                             connectOrCreate: {
+//                                 where: { character: emojiObj.character },
+//                                 create: { character: emojiObj.character }
+//                             }
+//                         }
+//                     },
+//                 }
+//             })}
+//         },
+//     })
 
-    res.json(result)
-})
+//     res.json(result)
+// })
 
 app.post(`/post/:post_id/comment/`, async (req, res) => {
     const { post_id } = req.params;
