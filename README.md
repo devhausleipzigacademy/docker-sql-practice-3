@@ -18,4 +18,4 @@ DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}
 ## Changing the schemata
 When you change the Prisma models/DB schemata, you can simply rebuild the container. However, the data in the database/in the seed file may no longer match. You will have to update the seed file to match the changed models.
 
-If old data is still in the DB and is not removed by Prisma as part of a migration, you can manually reset the data stored in the PostgreSQL volume by ensuring the containers are not running (`docker-compose stop`) and then executing `docker volume prune` to delete the managed volume. Then you can start up the containers again and then run `npm run migrate` and `npm run seed` to seed the database with your new test data.
+If old data is still in the DB and is not removed by Prisma as part of a migration, you can manually reset the data stored in the PostgreSQL volume by ensuring the containers are not running (`docker-compose stop`) and then executing `docker volume prune` to delete the managed volume. Then you can start up the containers again and then run `npm run migrate`.
