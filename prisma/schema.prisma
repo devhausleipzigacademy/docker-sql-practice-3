@@ -11,7 +11,7 @@ datasource db {
 }
 
 model Post {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   viewCount Int      @default(0)
@@ -22,44 +22,18 @@ model Post {
   image     String
   tags      String[]
   comments  Comment[]
-  // reactions EmojiPost[]
 }
 
 model Comment {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   author    String
   email     String
   content   String
+  replies   Comment[] @relation("reply")
+  replyTo   Comment? @relation("reply", fields: [replyToId], references: [id], onDelete: Cascade)
+  replyToId String?
   post      Post     @relation(fields: [postId], references: [id])
-  postId    Int
-  // reactions EmojiComment[]
+  postId    String
 }
-
-// model EmojiComment {
-//   number      Int       @default(0)
-//   comment     Comment   @relation(fields: [commentId], references: [id])
-//   commentId   Int
-//   emoji       Emoji     @relation(fields: [emojiId], references: [id])
-//   emojiId     Int
-
-//   @@id([commentId, emojiId])
-// }
-
-// model EmojiPost {
-//   number     Int      @default(0)
-//   post       Post     @relation(fields: [postId], references: [id])
-//   postId     Int
-//   emoji      Emoji    @relation(fields: [emojiId], references: [id])
-//   emojiId    Int
-
-//   @@id([postId, emojiId])
-// }
-
-// model Emoji {
-//   id          Int           @id @default(autoincrement())
-//   character   String        @unique
-//   posts       EmojiPost[]
-//   comments    EmojiComment[]
-// }

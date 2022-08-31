@@ -1,47 +1,47 @@
-version: '3.8'
+version: "3.8"
 
 networks:
-  backend-tier:
-    driver: bridge
+    backend-tier:
+        driver: bridge
 
 volumes:
-  pgsql-data:
+    pgsql-data:
 
 services:
-  pgsql:
-    image: bitnami/postgresql:latest
-    restart: unless-stopped
-    container_name: pgsql-example-3
-    # in production, would remove this mapping to prevent access to DB from outside
-    ports:
-      - "5432:5432"
-    env_file:
-      - .env
-    volumes:
-      - type: volume
-        source: pgsql-data
-        target: /var/lib/postgresql/data
-    networks:
-      - backend-tier
+    pgsql:
+        image: postgres:latest
+        restart: unless-stopped
+        container_name: pgsql-example-3
+        # in production, would remove the mapping below to prevent access to DB from outside
+        ports:
+            - "5432:5432"
+        env_file:
+            - .env
+        volumes:
+            - type: volume
+              source: pgsql-data
+              target: /var/lib/postgresql/data
+        networks:
+            - backend-tier
 
-  backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    container_name: example-backend
-    ports:
-      - "8000:8000"
-    env_file:
-      - .env
-    environment:
-    # overwrite to correct URL for internal network; only necesary because of hack to allow externally running migrate/seed
-      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@pgsql:${POSTGRES_PORT}/${POSTGRES_DB}?schema=public&connect_timeout=300
-    depends_on:
-      - pgsql
-    volumes:
-      - type: bind
-        source: ./prisma
-        target: /prisma
-    networks:
-      - backend-tier
+    backend:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        restart: unless-stopped
+        container_name: example-backend
+        ports:
+            - "8000:8000"
+        env_file:
+            - .env
+        environment:
+            # overwrite to correct URL for internal network; only necesary because of hack to allow externally running migrate/seed
+            - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@pgsql:${POSTGRES_PORT}/${POSTGRES_DB}?schema=public&connect_timeout=300
+        depends_on:
+            - pgsql
+        volumes:
+            - type: bind
+              source: ./prisma
+              target: /prisma
+        networks:
+            - backend-tier
